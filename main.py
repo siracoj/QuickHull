@@ -8,14 +8,13 @@ Author: Jared Siraco
 """
 
 #imports
-from __future__ import division
-from math import sqrt
 from tkinter import ttk,Tk,Frame,Menu,Canvas
 from tkinter.ttk  import *
 import threading
 
 #Custom imports
 from window import Window
+import Triangles
 from QuickHull import QuickHull
 
 
@@ -48,25 +47,16 @@ def startWindow():
 				minY = p[1]
 				r = p
 
-		drawPoints(canvas,points)
+		drawPoints(canvas,points,r,q) #Draw points and the first line from the highest an lowest points
 
 		points.remove(r)
 		points.remove(q)
 
-		click = threading.Event()
+		[set1,set2] = Triangles.splitPoints(r,q,q,points)
 
-		qh = QuickHull(click,draw,canvas)
-		
-
-		def continues():
-			click.set()
-		
-		next = Button(Panel,text="-->",command=continues)
-		next.place(x=50,y=100)
-
-		draw.mainloop()
-
-		qh.start(r,q,points)
+		qh = QuickHull(draw,canvas) 
+		qh.start(r,q,set1)
+		qh.start(r,q,set2)
 
 	#start adding points
 	def exportData():
@@ -93,11 +83,12 @@ def startWindow():
 		def readin(): #Call back to get text, open the file, and close the window
 			try:
 				print ("Loading file...")
-				filename = "test.txt"		#uses test as default entry
 				filename = text.get()
-				
+				if(filename==""):
+					filename = "test.txt"		#uses test as default entry
 				data = open(filename)
-				points = [[int(x) for x in line.split()] for line in data]
+				points = [[int(x) for x in line.split()] for line in data] # takes a each point in as: x y 
+
 				fileWindow.onExit()
 			except IOError:
 				print ("Could not read the specified file")
@@ -120,10 +111,17 @@ def startWindow():
 	menubar.add_cascade(label="File",menu=fileMenu)
 
 	mainWindow.startLoop()
-
-def drawPoints(canvas,points):
+#==================================Draw Stuff======================================
+def drawPoints(canvas,points,q,r):
 	for p in points:
 		canvas.create_text(p[0],p[1],text="+")
+	canvas.create_line(r[0],r[1],q[0],q[1],fill="purple")
+
+def drawPolygon(self):
+	poly = []
+	for x in self.hull:
+		poly += x
+	self.canvas.create_polygon(poly,fill='black',outline="purple")
 
 #===================================Main===========================================
 
