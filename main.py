@@ -28,40 +28,11 @@ def startWindow():
 	mainWindow.config(title = "QuickHull Menu",h=150,w=200)
 	mainWindow.positionWindow(mainWindow.TOPLEFT)
 	
-	def start(points):		
-		draw = Tk()
-
-		board = Window(draw)
-		board.config(title = "Diagram")
-		board.positionWindow(board.TOPRIGHT)
-
-		canvas = Canvas(draw,height=600,width=800)
-		canvas.place(x=0,y=0)
-		maxY = 0
-		minY = 600
-		for p in points:
-			if p[1] > maxY:
-				maxY = p[1]
-				q = p
-			if p[1] < minY:
-				minY = p[1]
-				r = p
-
-		drawPoints(canvas,points,r,q) #Draw points and the first line from the highest an lowest points
-
-		points.remove(r)
-		points.remove(q)
-
-		[set1,set2] = Triangles.splitPoints(r,q,q,points)
-
-		qh = QuickHull(draw,canvas) 
-		qh.start(r,q,set1)
-		qh.start(r,q,set2)
-
 	#start adding points
 	def exportData():
 		return
 	#Export points to csv
+
 	def getFile():
 
 		AskFile = Tk()
@@ -94,7 +65,7 @@ def startWindow():
 				print ("Could not read the specified file")
 			finally:
 				print("Closing Import...")
-				start(points)
+				QuickHull(points) #Start QuickHull process
 
 		ok = Button(AskFile,width=10, text="OK", command=readin)
 		ok.place(x=70,y=70)
@@ -104,7 +75,7 @@ def startWindow():
 	Panel.config(menu=menubar)
 
 	fileMenu = Menu(menubar)
-	fileMenu.add_command(label="Start", command = start)
+	#fileMenu.add_command(label="Start", command = start)
 	fileMenu.add_command(label="Export points", command = exportData)
 	fileMenu.add_command(label="Import...", command = getFile)
 	fileMenu.add_command(label="Exit", command = mainWindow.onExit)
@@ -112,10 +83,7 @@ def startWindow():
 
 	mainWindow.startLoop()
 #==================================Draw Stuff======================================
-def drawPoints(canvas,points,q,r):
-	for p in points:
-		canvas.create_text(p[0],p[1],text="+")
-	canvas.create_line(r[0],r[1],q[0],q[1],fill="purple")
+
 
 def drawPolygon(self):
 	poly = []
