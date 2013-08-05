@@ -29,6 +29,10 @@ def startWindow():
 	mainWindow.positionWindow(mainWindow.TOPLEFT)
 	
 	#start adding points
+	def start(points = []):
+		mainWindow.onExit()
+		QuickHull(points) #Start QuickHull process
+		mainWindow.mainloop();
 	def exportData():
 		return
 	#Export points to csv
@@ -65,7 +69,7 @@ def startWindow():
 				print ("Could not read the specified file")
 			finally:
 				print("Closing Import...")
-				QuickHull(points) #Start QuickHull process
+				start(points) #Start QuickHull process
 
 		ok = Button(AskFile,width=10, text="OK", command=readin)
 		ok.place(x=70,y=70)
@@ -76,10 +80,13 @@ def startWindow():
 
 	fileMenu = Menu(menubar)
 	#fileMenu.add_command(label="Start", command = start)
-	fileMenu.add_command(label="Export points", command = exportData)
+
 	fileMenu.add_command(label="Import...", command = getFile)
 	fileMenu.add_command(label="Exit", command = mainWindow.onExit)
 	menubar.add_cascade(label="File",menu=fileMenu)
+
+	SButton = Button(Panel, text = "Start", command = start)
+	SButton.pack()
 
 	mainWindow.startLoop()
 #==================================Draw Stuff======================================

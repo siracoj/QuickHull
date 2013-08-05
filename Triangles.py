@@ -7,7 +7,12 @@ Author: Jared Siraco
 """
 
 def splitPoints(r,q,testpoint,points): #splits points between points on the same side
-	side1 = [points[0]]				   #as testpoint and those not
+
+	if points == []:
+		return [],[]
+	if q==testpoint:
+		testpoint = points[0]
+	side1 = []				   #as testpoint and those not
 	side2 = []
 
 	for p in points:
