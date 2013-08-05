@@ -89,14 +89,6 @@ def startWindow():
 	SButton.pack()
 
 	mainWindow.startLoop()
-#==================================Draw Stuff======================================
-
-
-def drawPolygon(self):
-	poly = []
-	for x in self.hull:
-		poly += x
-	self.canvas.create_polygon(poly,fill='black',outline="purple")
 
 #===================================Main===========================================
 

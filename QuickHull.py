@@ -10,8 +10,6 @@ Author: Jared Siraco
 from math import sqrt
 from tkinter import ttk,Tk,Frame,Menu,Canvas,BOTH
 from tkinter.ttk  import *
-import threading
-from time import sleep
 
 #custom imports
 import Triangles
@@ -46,7 +44,7 @@ class QuickHull(Tk):
 					
 
 		
-		def point(event):
+		def point(event):  #Add points by clicking on the screen
 			self.canvas.create_text(event.x, event.y,text = "+")
 			points.append([event.x,event.y])
 
@@ -66,7 +64,7 @@ class QuickHull(Tk):
 		self.mainloop()
 	
 				
-	def nextButton(self):					#Button that starts and stops animation
+	def nextButton(self):					#Button that steps forward one step in the QuickHull
 		def callBack():
 			self.animate()
 
@@ -85,7 +83,7 @@ class QuickHull(Tk):
 
 
 
-	def onExit(self):
+	def onExit(self):  #Window popup signaling that the Quick Hull is complete
 		alert = Tk()
 		finish = Window(alert)
 		finish.config(title="Complete",w = 200, h=50)
@@ -101,17 +99,17 @@ class QuickHull(Tk):
 		
 
 
-	def drawPoints(self,points):			#Draw points and initial line
+	def drawPoints(self,points):			#Draw points Imported from a file
 		for p in points:
 			self.canvas.create_text(p[0],p[1],text="+")
 		
 
 
 
-def quickHullStart(points):
+def quickHullStart(points):  #Setup for the QuickHull Algorithm
 	maxY = -1
 	minY = float('inf')
-	for p in points:
+	for p in points:  #getting highest and lowest points (r, q)
 		if p[1] > maxY:
 			maxY = p[1]
 			q = p
@@ -123,13 +121,13 @@ def quickHullStart(points):
 	points.remove(q)
 	hull = r+q
 	
-	[set0,set1] = Triangles.splitPoints(r,q,q,points)
+	[set0,set1] = Triangles.splitPoints(r,q,q,points)  #Spliting points in half by a line with the Highest and lowest points
 	
 	quickHullAlg(set0, r,q)
 	quickHullAlg(set1, r,q)
 
 def quickHullAlg(points, r, q):	
-	furthestPoint = []       #In the inital call q and r two points with the highest and lowest y(or x) value
+	furthestPoint = []       #In the inital call q and r two points with the highest and lowest y value
 	maxdist = -1
 
 	if points == []:
@@ -149,7 +147,7 @@ def quickHullAlg(points, r, q):
 	points.remove(furthestPoint)
 			
 	triangle = r + q + furthestPoint
-	triList.append(triangle)
+	triList.append(triangle) #adding a triangle to the set to print out
 
 	[set0,set1] = Triangles.splitPoints(r,furthestPoint,q,points)
 	[set0,set2] = Triangles.splitPoints(q,furthestPoint,r,points)
